@@ -4,14 +4,22 @@
 #include <QObject>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include "storesseentity.h"
+#include "storessecustomer.h"
+#include <QTableWidget>
 
 class HttpRequest : public QObject
 {
     Q_OBJECT
+
 public:
     HttpRequest(QObject* parent = nullptr);
 
     static QString s_token;
+
+    static QNetworkRequest s_requestWithToken;
+
+    static QUrl s_baseUrl;
 
     void setUseSsl(bool ssl = true);
 
@@ -29,9 +37,15 @@ public:
 
     QNetworkAccessManager *networkManager = new QNetworkAccessManager(this);
 
-private slots:
-    void replyFinished(QNetworkReply* reply);
 
+    void getEntityData(StoresseEntity::Entity entity, int id);
+
+    StoresseCustomer *getCostumerData(int id);
+
+    void getCostumers(QTableWidget *tableWidget);
+
+private slots:
+    void loginReplyFinished(QNetworkReply* reply);
 
 private:
     QNetworkAccessManager accessManager;

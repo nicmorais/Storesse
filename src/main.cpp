@@ -18,8 +18,8 @@ int main(int argc, char *argv[])
         }
     }
 
-    QCoreApplication::setOrganizationName("Storesse");
     QCoreApplication::setApplicationName("Storesse");
+    QCoreApplication::setOrganizationName("Storesse");
 
     LoginWidget loginWidget;
     loginWidget.show();

@@ -23,7 +23,6 @@ private:
 
     QSettings settings;
 
-    HttpRequest *request = new HttpRequest(this);
 
 
 private slots:

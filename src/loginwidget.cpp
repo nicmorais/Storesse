@@ -12,7 +12,7 @@ LoginWidget::LoginWidget(QWidget *parent) :
     ui->emailLineEdit->setText(settings.value("user/email").toString());
     ui->hostnameLineEdit->setText(settings.value("server/hostname").toString());
     ui->portSpinBox->setValue(settings.value("server/port", "4000").toInt());
-    ui->sslCheckBox->setChecked(settings.value("server/ssl").toBool());
+    ui->sslCheckBox->setChecked(settings.value("server/useSsl").toBool());
 }
 
 LoginWidget::~LoginWidget()
@@ -21,6 +21,7 @@ LoginWidget::~LoginWidget()
 }
 
 void LoginWidget::connect(){
+    HttpRequest *request = new HttpRequest(this);
 
     QObject::connect(request, SIGNAL(loggedIn()), this, SLOT(showMainWindow()));
     QObject::connect(request, SIGNAL(loggedIn()), this, SLOT(saveSettings()));
@@ -43,13 +44,12 @@ void LoginWidget::saveSettings(){
     settings.setValue("user/email", ui->emailLineEdit->text());
     settings.setValue("server/hostname", ui->hostnameLineEdit->text());
     settings.setValue("server/port", ui->portSpinBox->value());
-    settings.setValue("server/ssl", ui->sslCheckBox->isChecked());
+    settings.setValue("server/useSsl", ui->sslCheckBox->isChecked());
 }
 
 void LoginWidget::showMainWindow(){
     MainWindow *mainWindow = new MainWindow;
     mainWindow->move(geometry().topLeft());
-
     mainWindow->show();
     close();
 }

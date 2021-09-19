@@ -2,33 +2,43 @@
 
 #include <QDebug>
 #include <QUrlQuery>
-#include <QEventLoop>
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <QEventLoop>
+#include <QJsonArray>
 
 HttpRequest::HttpRequest(QObject* parent) :
     QObject(parent)
 {
-    QObject::connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
+    s_requestWithToken.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
 
 }
 
 QString HttpRequest::s_token;
+
+QNetworkRequest HttpRequest::s_requestWithToken;
+
+QUrl HttpRequest::s_baseUrl;
 
 void HttpRequest::setUseSsl(bool ssl){
     this->useSsl = ssl;
 }
 
 void HttpRequest::login(QString email, QString password){
+    QObject::connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(loginReplyFinished(QNetworkReply*)));
+
     this->email = email;
 
     QUrl signInUrl;
 
     if(useSsl){
-        signInUrl.setUrl(QString("https://%1:%2/api/users/signin").arg(hostname.toString()).arg(port));
+        s_baseUrl = QString("https://%1:%2/api/").arg(hostname.toString()).arg(port);
     }else{
-        signInUrl.setUrl(QString("http://%1:%2/api/users/signin").arg(hostname.toString()).arg(port));
+        s_baseUrl = QString("http://%1:%2/api/").arg(hostname.toString()).arg(port);
     }
+    signInUrl.setUrl(s_baseUrl.toString() + "users/signin");
+
+    qDebug()<<signInUrl.toString();
 
     QNetworkRequest request(signInUrl);
 
@@ -45,14 +55,10 @@ void HttpRequest::login(QString email, QString password){
 
     request.setAttribute(QNetworkRequest::Http2AllowedAttribute, false);
     networkManager->post(request, jsonData);
-
-    qDebug()<<credentialsJson;
 }
 
-void HttpRequest::replyFinished(QNetworkReply* reply){
+void HttpRequest::loginReplyFinished(QNetworkReply* reply){
     int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-
-    qDebug()<<reply->readAll();
 
     if(statusCode != 201){
         qDebug()<< tr("Could not connect to server. HTTP Status code: ") + QString::number(statusCode);
@@ -63,10 +69,16 @@ void HttpRequest::replyFinished(QNetworkReply* reply){
         QString token = jsonDoc.toVariant().toJsonObject()["token"].toString();
 
         HttpRequest::s_token = token;
-        qDebug()<<token;
+        QString bearer = "Bearer: " +  s_token;
+        s_requestWithToken.setRawHeader("Authorization: ", bearer.toLocal8Bit());
+        s_requestWithToken.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
+
         emit loggedIn();
-        reply->deleteLater();
     }
+
+    reply->deleteLater();
+
+    QObject::disconnect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(loginReplyFinished(QNetworkReply*)));
 }
 
 QString HttpRequest::getEmail(){
@@ -79,4 +91,97 @@ void HttpRequest::setHostname(QString hostname){
 
 void HttpRequest::setPort(int port){
     this->port = port;
+}
+
+void HttpRequest::getEntityData(StoresseEntity::Entity entity, int id){
+    switch (entity) {
+    case StoresseEntity::Customer:{
+        break;
+    }
+    case StoresseEntity::Product:{
+        break;
+
+    }
+    case StoresseEntity::Sale:{
+        break;
+
+    }
+    case StoresseEntity::SaleProduct:{
+        break;
+
+    }
+    case StoresseEntity::Country:{
+        break;
+
+    }
+    case StoresseEntity::State:{
+        break;
+
+    }
+    case StoresseEntity::City:{
+        break;
+
+    }
+    case StoresseEntity::User:{
+        break;
+    }
+    }
+}
+
+StoresseCustomer* HttpRequest::getCostumerData(int id){
+    QNetworkAccessManager localManager;
+    QEventLoop eventLoop;
+    QObject::connect(&localManager, &QNetworkAccessManager::finished,
+                     &eventLoop, &QEventLoop::quit);
+
+    s_requestWithToken.setUrl(QUrl(QString(s_baseUrl.toString() + "customers/%1").arg(id)));
+
+    QNetworkReply* reply = localManager.get(s_requestWithToken);
+    eventLoop.exec();
+
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(reply->readAll());
+
+    reply->deleteLater();
+
+    StoresseCustomer *customer = new StoresseCustomer;
+
+    return customer;
+}
+
+void HttpRequest::getCostumers(QTableWidget* tableWidget){
+
+    for(int i = 0; i<tableWidget->rowCount(); i++){
+        tableWidget->removeRow(i);
+    }
+
+    QNetworkAccessManager localManager;
+    QEventLoop eventLoop;
+    QObject::connect(&localManager, &QNetworkAccessManager::finished,
+                     &eventLoop, &QEventLoop::quit);
+
+    s_requestWithToken.setUrl(QUrl(QString(s_baseUrl.toString() + "customers")));
+
+    QNetworkReply* reply = localManager.get(s_requestWithToken);
+    eventLoop.exec();
+
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(reply->readAll());
+
+    int row = 0;
+    for (QVariant customer : jsonDoc.toVariant().toMap()["data"].toList()){
+        tableWidget->insertRow(row);
+
+        tableWidget->setItem(row, 0, new QTableWidgetItem(customer.toMap()["id"].toString()));
+        tableWidget->setItem(row, 1, new QTableWidgetItem(customer.toMap()["name"].toString()));
+        tableWidget->setItem(row, 2, new QTableWidgetItem(customer.toMap()["email"].toString()));
+
+        row++;
+    }
+    QStringList labels;
+    labels.append("ID");
+    labels.append(tr("Name"));
+    labels.append("E-mail");
+
+    tableWidget->setHorizontalHeaderLabels(labels);
+
+
 }
