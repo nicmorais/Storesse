@@ -17,8 +17,7 @@ SOURCES += \
     src/salewidget.cpp \
     src/storessecity.cpp \
     src/storessecustomer.cpp \
-    src/storesseentity.cpp \
-    src/storessetablemodel.cpp
+    src/storesseentity.cpp
 
 HEADERS += \
     src/customerwidget.h \
@@ -28,8 +27,7 @@ HEADERS += \
     src/salewidget.h \
     src/storessecity.h \
     src/storessecustomer.h \
-    src/storesseentity.h \
-    src/storessetablemodel.h
+    src/storesseentity.h
 
 FORMS += \
     src/customerwidget.ui \
@@ -46,3 +44,6 @@ CONFIG += embed_translations
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    resources/resources.qrc

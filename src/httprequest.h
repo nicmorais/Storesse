@@ -7,6 +7,7 @@
 #include "storesseentity.h"
 #include "storessecustomer.h"
 #include <QTableWidget>
+#include <QStandardItemModel>
 
 class HttpRequest : public QObject
 {
@@ -37,12 +38,11 @@ public:
 
     QNetworkAccessManager *networkManager = new QNetworkAccessManager(this);
 
-
     void getEntityData(StoresseEntity::Entity entity, int id);
 
     StoresseCustomer *getCostumerData(int id);
 
-    void getCostumers(QTableWidget *tableWidget);
+    QStandardItemModel *getCostumersModel();
 
 private slots:
     void loginReplyFinished(QNetworkReply* reply);

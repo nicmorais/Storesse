@@ -148,11 +148,8 @@ StoresseCustomer* HttpRequest::getCostumerData(int id){
     return customer;
 }
 
-void HttpRequest::getCostumers(QTableWidget* tableWidget){
-
-    for(int i = 0; i<tableWidget->rowCount(); i++){
-        tableWidget->removeRow(i);
-    }
+QStandardItemModel* HttpRequest::getCostumersModel(){
+    QStandardItemModel *model = new QStandardItemModel;
 
     QNetworkAccessManager localManager;
     QEventLoop eventLoop;
@@ -168,20 +165,14 @@ void HttpRequest::getCostumers(QTableWidget* tableWidget){
 
     int row = 0;
     for (QVariant customer : jsonDoc.toVariant().toMap()["data"].toList()){
-        tableWidget->insertRow(row);
+        model->insertRow(row);
 
-        tableWidget->setItem(row, 0, new QTableWidgetItem(customer.toMap()["id"].toString()));
-        tableWidget->setItem(row, 1, new QTableWidgetItem(customer.toMap()["name"].toString()));
-        tableWidget->setItem(row, 2, new QTableWidgetItem(customer.toMap()["email"].toString()));
+        model->setItem(row, 0, new QStandardItem(customer.toMap()["id"].toString()));
+        model->setItem(row, 1, new QStandardItem(customer.toMap()["name"].toString()));
+        model->setItem(row, 2, new QStandardItem(customer.toMap()["email"].toString()));
 
         row++;
     }
-    QStringList labels;
-    labels.append("ID");
-    labels.append(tr("Name"));
-    labels.append("E-mail");
 
-    tableWidget->setHorizontalHeaderLabels(labels);
-
-
+    return model;
 }

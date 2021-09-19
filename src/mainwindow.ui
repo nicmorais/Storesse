@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Storesse</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resources/resources.qrc">
+    <normaloff>:/icons/logo.svg</normaloff>:/icons/logo.svg</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
@@ -23,10 +27,26 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="tabPosition">
+       <enum>QTabWidget::North</enum>
+      </property>
+      <property name="tabShape">
+       <enum>QTabWidget::Rounded</enum>
+      </property>
       <property name="currentIndex">
        <number>0</number>
       </property>
+      <property name="iconSize">
+       <size>
+        <width>32</width>
+        <height>32</height>
+       </size>
+      </property>
       <widget class="QWidget" name="customersTab">
+       <attribute name="icon">
+        <iconset resource="../resources/resources.qrc">
+         <normaloff>:/icons/customer.svg</normaloff>:/icons/customer.svg</iconset>
+       </attribute>
        <attribute name="title">
         <string>Customers</string>
        </attribute>
@@ -51,6 +71,10 @@
        </layout>
       </widget>
       <widget class="QWidget" name="productsTab">
+       <attribute name="icon">
+        <iconset resource="../resources/resources.qrc">
+         <normaloff>:/icons/product.svg</normaloff>:/icons/product.svg</iconset>
+       </attribute>
        <attribute name="title">
         <string>Products</string>
        </attribute>
@@ -75,6 +99,10 @@
        </layout>
       </widget>
       <widget class="QWidget" name="salesTab">
+       <attribute name="icon">
+        <iconset resource="../resources/resources.qrc">
+         <normaloff>:/icons/sale.svg</normaloff>:/icons/sale.svg</iconset>
+       </attribute>
        <attribute name="title">
         <string>Sales</string>
        </attribute>
@@ -104,14 +132,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QTableWidget" name="tableWidget">
-      <property name="columnCount">
-       <number>3</number>
-      </property>
-      <column/>
-      <column/>
-      <column/>
-     </widget>
+     <widget class="QTableView" name="tableView"/>
     </item>
    </layout>
   </widget>
@@ -139,7 +160,9 @@
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources/resources.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>searchCustomersBtn</sender>
