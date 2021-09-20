@@ -6,6 +6,7 @@
 #include <QModelIndex>
 #include <QHeaderView>
 #include <QStandardItemModel>
+#include "noteditableitemdelegate.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -26,27 +27,31 @@ void MainWindow::setUpTable(){
 
     HttpRequest request;
     QStandardItemModel *model;
-    model = request.getModel(StoresseEntity::Customer);
-
+    int columnCount;
     switch (currentTab) {
     case 0:{
-
-//        model->setHeaderData(0, Qt::Horizontal, "ID");
-//        model->setHeaderData(1, Qt::Horizontal, tr("Name"));
-//        model->setHeaderData(2, Qt::Horizontal, "E-mail");
-
-//       ui->tableView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
-
+        model = request.getModel(StoresseEntity::Customer);
+        ui->tableView->setModel(model);
+        ui->tableView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+        columnCount = 4;
         break;
     }
     case 1:{
         model = request.getModel(StoresseEntity::Product);
+        columnCount = 6;
+
         break;
     }
     case 2:{
         break;
     }
     }
+
+    for (int i=0; i<columnCount; i++ ) {
+        NotEditableItemDelegate *itemDelegate = new NotEditableItemDelegate(ui->tableView);
+        ui->tableView->setItemDelegateForColumn(i, itemDelegate);
+    }
+
     ui->tableView->setModel(model);
 }
 
