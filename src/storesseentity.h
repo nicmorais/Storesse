@@ -2,6 +2,7 @@
 #define STORESSEENTITY_H
 
 #include <QObject>
+#include <QVariant>
 
 class StoresseEntity : public QObject
 {
@@ -9,7 +10,7 @@ class StoresseEntity : public QObject
 public:
     explicit StoresseEntity(QObject *parent = nullptr);
 
-    enum Entity{
+    enum entity{
         Customer,
         Product,
         Sale,
@@ -20,7 +21,9 @@ public:
         User,
     };
 
+    virtual QList<QVariant> getFields();
 signals:
+
 
 };
 

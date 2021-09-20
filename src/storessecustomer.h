@@ -6,20 +6,21 @@
 #include <QDate>
 #include "storessecity.h"
 
-class StoresseCustomer : public QObject
+class StoresseCustomer : public StoresseEntity
 {
     Q_OBJECT
 public:
-    explicit StoresseCustomer(QObject *parent = nullptr);
+    StoresseCustomer(QObject *parent = nullptr);
 
-    const StoresseEntity::Entity entity = StoresseEntity::Customer;
+    const StoresseEntity::entity entity = StoresseEntity::Customer;
 
     void setName(QString name);
 
     QString getName();
 
+    QList<QVariant> getFields();
+
 signals:
-    void idSet();
 
 private:
     int id;
@@ -36,6 +37,8 @@ public slots:
     void setId(int id);
 
     void getData();
+
+
 private slots:
 
 };

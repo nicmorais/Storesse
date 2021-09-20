@@ -13,6 +13,8 @@ LoginWidget::LoginWidget(QWidget *parent) :
     ui->hostnameLineEdit->setText(settings.value("server/hostname").toString());
     ui->portSpinBox->setValue(settings.value("server/port", "4000").toInt());
     ui->sslCheckBox->setChecked(settings.value("server/useSsl").toBool());
+
+    ui->passwordLineEdit->setFocus();
 }
 
 LoginWidget::~LoginWidget()

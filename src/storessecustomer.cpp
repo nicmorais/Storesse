@@ -1,13 +1,12 @@
 #include "storessecustomer.h"
 
-StoresseCustomer::StoresseCustomer(QObject *parent) : QObject(parent)
+StoresseCustomer::StoresseCustomer(QObject *parent) : StoresseEntity(parent)
 {
 
 }
 
 void StoresseCustomer::setId(int id){
     this->id = id;
-    emit idSet();
 }
 
 void StoresseCustomer::getData(){
@@ -20,4 +19,16 @@ void StoresseCustomer::setName(QString name){
 
 QString StoresseCustomer::getName(){
     return name;
+}
+
+QList<QVariant> StoresseCustomer::getFields(){
+    QList<QVariant> fields;
+
+    fields.append("id");
+    fields.append("name");
+    fields.append("document");
+    fields.append("email");
+
+    return fields;
+
 }

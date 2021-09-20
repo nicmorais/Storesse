@@ -4,3 +4,7 @@ StoresseEntity::StoresseEntity(QObject *parent) : QObject(parent)
 {
 
 }
+
+QList<QVariant> StoresseEntity::getFields(){
+
+}

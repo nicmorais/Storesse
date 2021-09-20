@@ -6,6 +6,7 @@
 #include <QJsonDocument>
 #include <QEventLoop>
 #include <QJsonArray>
+#include "storesseproduct.h"
 
 HttpRequest::HttpRequest(QObject* parent) :
     QObject(parent)
@@ -20,8 +21,8 @@ QNetworkRequest HttpRequest::s_requestWithToken;
 
 QUrl HttpRequest::s_baseUrl;
 
-void HttpRequest::setUseSsl(bool ssl){
-    this->useSsl = ssl;
+void HttpRequest::setUseSsl(bool useSsl){
+    this->useSsl = useSsl;
 }
 
 void HttpRequest::login(QString email, QString password){
@@ -37,8 +38,6 @@ void HttpRequest::login(QString email, QString password){
         s_baseUrl = QString("http://%1:%2/api/").arg(hostname.toString()).arg(port);
     }
     signInUrl.setUrl(s_baseUrl.toString() + "users/signin");
-
-    qDebug()<<signInUrl.toString();
 
     QNetworkRequest request(signInUrl);
 
@@ -93,7 +92,7 @@ void HttpRequest::setPort(int port){
     this->port = port;
 }
 
-void HttpRequest::getEntityData(StoresseEntity::Entity entity, int id){
+void HttpRequest::getEntityData(StoresseEntity::entity entity, int id){
     switch (entity) {
     case StoresseEntity::Customer:{
         break;
@@ -148,15 +147,36 @@ StoresseCustomer* HttpRequest::getCostumerData(int id){
     return customer;
 }
 
-QStandardItemModel* HttpRequest::getCostumersModel(){
+QStandardItemModel* HttpRequest::getModel(StoresseEntity::entity entity){
+
     QStandardItemModel *model = new QStandardItemModel;
 
     QNetworkAccessManager localManager;
     QEventLoop eventLoop;
     QObject::connect(&localManager, &QNetworkAccessManager::finished,
                      &eventLoop, &QEventLoop::quit);
+    QUrl url;
 
-    s_requestWithToken.setUrl(QUrl(QString(s_baseUrl.toString() + "customers")));
+    StoresseEntity *entityObj;
+    switch (entity) {
+    case StoresseEntity::Customer:{
+        entityObj = new StoresseCustomer();
+        url.setUrl(QString(s_baseUrl.toString() + "customers"));
+        break;
+    }
+    case StoresseEntity::Product:{
+        entityObj = new StoresseProduct();
+        url.setUrl(QString(s_baseUrl.toString() + "products"));
+        break;
+    }
+    case StoresseEntity::Sale:{
+
+        url.setUrl(QString(s_baseUrl.toString() + "sales"));
+        break;
+    }
+    }
+
+    s_requestWithToken.setUrl(url);
 
     QNetworkReply* reply = localManager.get(s_requestWithToken);
     eventLoop.exec();
@@ -164,15 +184,26 @@ QStandardItemModel* HttpRequest::getCostumersModel(){
     QJsonDocument jsonDoc = QJsonDocument::fromJson(reply->readAll());
 
     int row = 0;
-    for (QVariant customer : jsonDoc.toVariant().toMap()["data"].toList()){
-        model->insertRow(row);
+    int column = 0;
+    for (QVariant item : jsonDoc.toVariant().toMap()["data"].toList()){
+        column = 0;
 
-        model->setItem(row, 0, new QStandardItem(customer.toMap()["id"].toString()));
-        model->setItem(row, 1, new QStandardItem(customer.toMap()["name"].toString()));
-        model->setItem(row, 2, new QStandardItem(customer.toMap()["email"].toString()));
-
+        for(const QVariant &field : entityObj->getFields()){
+            model->setItem(row, column, new QStandardItem(item.toMap()[field.toString()].toString()));
+            column++;
+        }
         row++;
     }
 
+    int section = 0;
+    for(const QVariant &field : entityObj->getFields()){
+
+        model->setHeaderData(section, Qt::Horizontal, field.toString().left(1).toUpper() + field.toString().mid(1));
+        section++;
+
+    }
+
+    delete entityObj;
     return model;
 }
+

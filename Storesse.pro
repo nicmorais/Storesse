@@ -17,7 +17,9 @@ SOURCES += \
     src/salewidget.cpp \
     src/storessecity.cpp \
     src/storessecustomer.cpp \
-    src/storesseentity.cpp
+    src/storesseentity.cpp \
+    src/storesseproduct.cpp \
+    src/storessewindow.cpp
 
 HEADERS += \
     src/customerwidget.h \
@@ -27,7 +29,9 @@ HEADERS += \
     src/salewidget.h \
     src/storessecity.h \
     src/storessecustomer.h \
-    src/storesseentity.h
+    src/storesseentity.h \
+    src/storesseproduct.h \
+    src/storessewindow.h
 
 FORMS += \
     src/customerwidget.ui \

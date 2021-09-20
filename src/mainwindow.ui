@@ -52,7 +52,7 @@
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QPushButton" name="pushButton">
+         <widget class="QPushButton" name="newCostumerBtn">
           <property name="text">
            <string>New</string>
           </property>
@@ -156,7 +156,7 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionOptions">
    <property name="text">
-    <string>Options...</string>
+    <string>Settings</string>
    </property>
   </action>
  </widget>

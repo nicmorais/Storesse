@@ -22,7 +22,7 @@ public:
 
     static QUrl s_baseUrl;
 
-    void setUseSsl(bool ssl = true);
+    void setUseSsl(bool useSsl = true);
 
     QString getEmail();
 
@@ -38,11 +38,15 @@ public:
 
     QNetworkAccessManager *networkManager = new QNetworkAccessManager(this);
 
-    void getEntityData(StoresseEntity::Entity entity, int id);
+    void getEntityData(StoresseEntity::entity entity, int id);
 
     StoresseCustomer *getCostumerData(int id);
 
+    QStandardItemModel *getModel(StoresseEntity::entity entity);
+
     QStandardItemModel *getCostumersModel();
+
+    QStandardItemModel *getProductsModel();
 
 private slots:
     void loginReplyFinished(QNetworkReply* reply);

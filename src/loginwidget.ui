@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string notr="true">Storesse Login</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resources/resources.qrc">
+    <normaloff>:/icons/logo.svg</normaloff>:/icons/logo.svg</iconset>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="storesseLabel">
@@ -162,7 +166,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources/resources.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>emailLineEdit</sender>
