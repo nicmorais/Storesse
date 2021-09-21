@@ -9,7 +9,7 @@ class StoresseProduct : public StoresseEntity
 public:
     explicit StoresseProduct(QObject *parent = nullptr);
 
-    QList<QVariant> getFields() override;
+    QList<QVariant> getSummaryFields() override;
 signals:
 
 };

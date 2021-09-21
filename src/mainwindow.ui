@@ -132,7 +132,14 @@
      </widget>
     </item>
     <item>
-     <widget class="QTableView" name="tableView"/>
+     <widget class="QTableView" name="tableView">
+      <property name="selectionMode">
+       <enum>QAbstractItemView::SingleSelection</enum>
+      </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectRows</enum>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -171,8 +178,8 @@
    <slot>setUpTable()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>783</x>
-     <y>81</y>
+     <x>840</x>
+     <y>109</y>
     </hint>
     <hint type="destinationlabel">
      <x>858</x>
@@ -188,7 +195,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>101</x>
-     <y>80</y>
+     <y>95</y>
     </hint>
     <hint type="destinationlabel">
      <x>856</x>
@@ -204,7 +211,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>79</x>
-     <y>80</y>
+     <y>95</y>
     </hint>
     <hint type="destinationlabel">
      <x>853</x>
@@ -220,7 +227,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>101</x>
-     <y>80</y>
+     <y>95</y>
     </hint>
     <hint type="destinationlabel">
      <x>855</x>
@@ -235,12 +242,12 @@
    <slot>click()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>128</x>
-     <y>81</y>
+     <x>195</x>
+     <y>109</y>
     </hint>
     <hint type="destinationlabel">
-     <x>783</x>
-     <y>81</y>
+     <x>840</x>
+     <y>109</y>
     </hint>
    </hints>
   </connection>
@@ -252,11 +259,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>72</x>
-     <y>80</y>
+     <y>95</y>
     </hint>
     <hint type="destinationlabel">
      <x>101</x>
-     <y>80</y>
+     <y>95</y>
     </hint>
    </hints>
   </connection>
@@ -268,11 +275,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>57</x>
-     <y>80</y>
+     <y>95</y>
     </hint>
     <hint type="destinationlabel">
      <x>79</x>
-     <y>80</y>
+     <y>95</y>
     </hint>
    </hints>
   </connection>
@@ -284,7 +291,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>35</x>
-     <y>80</y>
+     <y>95</y>
     </hint>
     <hint type="destinationlabel">
      <x>298</x>
@@ -305,6 +312,22 @@
     <hint type="destinationlabel">
      <x>430</x>
      <y>233</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tableView</sender>
+   <signal>doubleClicked(QModelIndex)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>editItem(QModelIndex)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>692</x>
+     <y>219</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>857</x>
+     <y>170</y>
     </hint>
    </hints>
   </connection>

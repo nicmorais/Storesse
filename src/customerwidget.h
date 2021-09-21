@@ -8,7 +8,7 @@ namespace Ui {
 class CustomerWidget;
 }
 
-class CustomerWidget : public StoresseWindow
+class CustomerWidget : public QWidget
 {
     Q_OBJECT
 
@@ -22,7 +22,7 @@ public:
 private:
     Ui::CustomerWidget *ui;
 
-    windowMode mode;
+    StoresseWindow::windowMode mode;
 
     int costumerId;
 };

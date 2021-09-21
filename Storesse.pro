@@ -16,9 +16,12 @@ SOURCES += \
     src/mainwindow.cpp \
     src/salewidget.cpp \
     src/storessecity.cpp \
+    src/storessecountry.cpp \
     src/storessecustomer.cpp \
     src/storesseentity.cpp \
     src/storesseproduct.cpp \
+    src/storessesale.cpp \
+    src/storessestate.cpp \
     src/storessewindow.cpp \
 
 HEADERS += \
@@ -28,9 +31,12 @@ HEADERS += \
     src/mainwindow.h \
     src/salewidget.h \
     src/storessecity.h \
+    src/storessecountry.h \
     src/storessecustomer.h \
     src/storesseentity.h \
     src/storesseproduct.h \
+    src/storessesale.h \
+    src/storessestate.h \
     src/storessewindow.h \
     src/noteditableitemdelegate.h
 

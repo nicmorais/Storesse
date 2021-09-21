@@ -21,7 +21,7 @@ public:
         User,
     };
 
-    virtual QList<QVariant> getFields();
+    virtual QList<QVariant> getSummaryFields();
 signals:
 
 

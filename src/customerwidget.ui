@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>CustomerWidget</class>
  <widget class="QWidget" name="CustomerWidget">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +14,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Customer</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../resources/resources.qrc">
+    <normaloff>:/icons/customer.svg</normaloff>:/icons/customer.svg</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -66,53 +73,63 @@
      <item row="4" column="1">
       <widget class="QLineEdit" name="zipCodeLineEdit"/>
      </item>
-     <item row="5" column="0">
+     <item row="6" column="0">
       <widget class="QLabel" name="birthdateLabel">
        <property name="text">
         <string>Birthdate:</string>
        </property>
       </widget>
      </item>
-     <item row="5" column="1">
-      <widget class="QDateEdit" name="dateEdit"/>
+     <item row="6" column="1">
+      <widget class="QDateEdit" name="birthdateDateEdit"/>
      </item>
-     <item row="6" column="0">
+     <item row="7" column="0">
       <widget class="QLabel" name="countryLabel">
        <property name="text">
         <string>Country:</string>
        </property>
       </widget>
      </item>
-     <item row="6" column="1">
+     <item row="7" column="1">
       <widget class="QComboBox" name="countryComboBox"/>
      </item>
-     <item row="7" column="0">
+     <item row="8" column="0">
       <widget class="QLabel" name="stateLabel">
        <property name="text">
         <string>State:</string>
        </property>
       </widget>
      </item>
-     <item row="7" column="1">
+     <item row="8" column="1">
       <widget class="QComboBox" name="stateComboBox">
        <property name="enabled">
         <bool>false</bool>
        </property>
       </widget>
      </item>
-     <item row="8" column="0">
+     <item row="9" column="0">
       <widget class="QLabel" name="cityLabel">
        <property name="text">
         <string>City:</string>
        </property>
       </widget>
      </item>
-     <item row="8" column="1">
+     <item row="9" column="1">
       <widget class="QComboBox" name="cityComboBox">
        <property name="enabled">
         <bool>false</bool>
        </property>
       </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="emailLabel">
+       <property name="text">
+        <string>E-mail</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QLineEdit" name="emailLineEdit"/>
      </item>
     </layout>
    </item>
@@ -155,6 +172,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources/resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

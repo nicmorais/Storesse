@@ -23,6 +23,8 @@ public slots:
 private:
     Ui::MainWindow *ui;
 
+    QRect getSubWindowRect(float width, float height);
+
 private slots:
     void newSale();
 };

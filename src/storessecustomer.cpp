@@ -13,15 +13,8 @@ void StoresseCustomer::getData(){
 
 }
 
-void StoresseCustomer::setName(QString name){
-    this->name = name;
-}
 
-QString StoresseCustomer::getName(){
-    return name;
-}
-
-QList<QVariant> StoresseCustomer::getFields(){
+QList<QVariant> StoresseCustomer::getSummaryFields(){
     QList<QVariant> fields;
 
     fields.append("id");
@@ -30,5 +23,4 @@ QList<QVariant> StoresseCustomer::getFields(){
     fields.append("email");
 
     return fields;
-
 }

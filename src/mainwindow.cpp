@@ -7,6 +7,7 @@
 #include <QHeaderView>
 #include <QStandardItemModel>
 #include "noteditableitemdelegate.h"
+#include "customerwidget.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -14,7 +15,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    setUpTable();
 }
 
 MainWindow::~MainWindow()
@@ -27,32 +27,36 @@ void MainWindow::setUpTable(){
 
     HttpRequest request;
     QStandardItemModel *model;
-    int columnCount;
+
     switch (currentTab) {
     case 0:{
         model = request.getModel(StoresseEntity::Customer);
-        ui->tableView->setModel(model);
-        ui->tableView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
-        columnCount = 4;
+
+
         break;
     }
     case 1:{
         model = request.getModel(StoresseEntity::Product);
-        columnCount = 6;
-
         break;
     }
     case 2:{
+        model = request.getModel(StoresseEntity::Sale);
+
         break;
     }
     }
 
-    for (int i=0; i<columnCount; i++ ) {
+    ui->tableView->setModel(model);
+
+    if(model->rowCount() > 0){
+        ui->tableView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+    }
+
+    for (int i=0; i<model->columnCount(); i++ ) {
         NotEditableItemDelegate *itemDelegate = new NotEditableItemDelegate(ui->tableView);
         ui->tableView->setItemDelegateForColumn(i, itemDelegate);
     }
 
-    ui->tableView->setModel(model);
 }
 
 void MainWindow::newSale(){
@@ -60,5 +64,28 @@ void MainWindow::newSale(){
 }
 
 void MainWindow::editItem(QModelIndex index){
+    int currentTab = ui->tabWidget->currentIndex();
 
+    switch (currentTab) {
+    case 0:{
+        CustomerWidget *customerWidget = new CustomerWidget(index.siblingAtColumn(0).data(Qt::EditRole).toInt());
+        customerWidget->setGeometry(getSubWindowRect(0.5, 0.9));
+        customerWidget->show();
+    }
+    case 1:{
+
+    }
+    case 2:{
+
+    }
+    }
+}
+
+QRect MainWindow::getSubWindowRect(float width, float height){
+    QRect rect = geometry();
+    rect.setWidth(geometry().width() * width);
+    rect.setHeight(geometry().height() * height);
+    rect.moveCenter(geometry().center());
+
+    return rect;
 }

@@ -5,7 +5,7 @@ StoresseProduct::StoresseProduct(QObject *parent) : StoresseEntity(parent)
 
 }
 
-QList<QVariant> StoresseProduct::getFields(){
+QList<QVariant> StoresseProduct::getSummaryFields(){
     QList<QVariant> fields;
 
     fields.append("id");

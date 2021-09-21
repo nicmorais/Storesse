@@ -14,15 +14,8 @@ public:
 
     const StoresseEntity::entity entity = StoresseEntity::Customer;
 
-    void setName(QString name);
+    QList<QVariant> getSummaryFields() override;
 
-    QString getName();
-
-    QList<QVariant> getFields();
-
-signals:
-
-private:
     int id;
     QString name;
     QString addressLine1;
@@ -33,8 +26,13 @@ private:
     QString email;
     StoresseCity city;
 
+signals:
+
+private:
+
 public slots:
     void setId(int id);
+
 
     void getData();
 

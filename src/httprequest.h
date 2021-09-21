@@ -5,9 +5,9 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include "storesseentity.h"
-#include "storessecustomer.h"
 #include <QTableWidget>
 #include <QStandardItemModel>
+#include "storessecustomer.h"
 
 class HttpRequest : public QObject
 {
@@ -21,6 +21,8 @@ public:
     static QNetworkRequest s_requestWithToken;
 
     static QUrl s_baseUrl;
+
+    static int port;
 
     void setUseSsl(bool useSsl = true);
 
@@ -36,15 +38,13 @@ public:
 
     int getPort();
 
-    QNetworkAccessManager *networkManager = new QNetworkAccessManager(this);
+    QNetworkAccessManager *networkManager = new QNetworkAccessManager;
 
-    void getEntityData(StoresseEntity::entity entity, int id);
-
-    StoresseCustomer *getCostumerData(int id);
+    StoresseCustomer *getCustomerData(int id);
 
     QStandardItemModel *getModel(StoresseEntity::entity entity);
 
-    QStandardItemModel *getCostumersModel();
+    QStandardItemModel *getCustomersModel();
 
     QStandardItemModel *getProductsModel();
 
@@ -59,8 +59,6 @@ private:
     QString email;
 
     QUrl hostname;
-
-    int port;
 
 signals:
     void loggedIn();

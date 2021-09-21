@@ -7,12 +7,13 @@
 #include <QEventLoop>
 #include <QJsonArray>
 #include "storesseproduct.h"
+#include "storessesale.h"
+#include "storessecustomer.h"
 
 HttpRequest::HttpRequest(QObject* parent) :
     QObject(parent)
 {
     s_requestWithToken.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
-
 }
 
 QString HttpRequest::s_token;
@@ -20,6 +21,8 @@ QString HttpRequest::s_token;
 QNetworkRequest HttpRequest::s_requestWithToken;
 
 QUrl HttpRequest::s_baseUrl;
+
+int HttpRequest::port;
 
 void HttpRequest::setUseSsl(bool useSsl){
     this->useSsl = useSsl;
@@ -92,42 +95,7 @@ void HttpRequest::setPort(int port){
     this->port = port;
 }
 
-void HttpRequest::getEntityData(StoresseEntity::entity entity, int id){
-    switch (entity) {
-    case StoresseEntity::Customer:{
-        break;
-    }
-    case StoresseEntity::Product:{
-        break;
-
-    }
-    case StoresseEntity::Sale:{
-        break;
-
-    }
-    case StoresseEntity::SaleProduct:{
-        break;
-
-    }
-    case StoresseEntity::Country:{
-        break;
-
-    }
-    case StoresseEntity::State:{
-        break;
-
-    }
-    case StoresseEntity::City:{
-        break;
-
-    }
-    case StoresseEntity::User:{
-        break;
-    }
-    }
-}
-
-StoresseCustomer* HttpRequest::getCostumerData(int id){
+StoresseCustomer* HttpRequest::getCustomerData(int id){
     QNetworkAccessManager localManager;
     QEventLoop eventLoop;
     QObject::connect(&localManager, &QNetworkAccessManager::finished,
@@ -143,6 +111,13 @@ StoresseCustomer* HttpRequest::getCostumerData(int id){
     reply->deleteLater();
 
     StoresseCustomer *customer = new StoresseCustomer;
+    customer->name = jsonDoc.toVariant().toMap()["data"].toMap()["name"].toString();
+    customer->addressLine1 = jsonDoc.toVariant().toMap()["data"].toMap()["address_line1"].toString();
+    customer->addressLine2 = jsonDoc.toVariant().toMap()["data"].toMap()["address_line2"].toString();
+    customer->zipCode = jsonDoc.toVariant().toMap()["data"].toMap()["zip_code"].toString();
+    customer->document = jsonDoc.toVariant().toMap()["data"].toMap()["document"].toString();
+    customer->birthdate = jsonDoc.toVariant().toMap()["data"].toMap()["birthdate"].toDate();
+    customer->email = jsonDoc.toVariant().toMap()["data"].toMap()["email"].toString();
 
     return customer;
 }
@@ -170,7 +145,7 @@ QStandardItemModel* HttpRequest::getModel(StoresseEntity::entity entity){
         break;
     }
     case StoresseEntity::Sale:{
-
+        entityObj = new StoresseSale();
         url.setUrl(QString(s_baseUrl.toString() + "sales"));
         break;
     }
@@ -182,13 +157,12 @@ QStandardItemModel* HttpRequest::getModel(StoresseEntity::entity entity){
     eventLoop.exec();
 
     QJsonDocument jsonDoc = QJsonDocument::fromJson(reply->readAll());
-
     int row = 0;
     int column = 0;
     for (QVariant item : jsonDoc.toVariant().toMap()["data"].toList()){
         column = 0;
 
-        for(const QVariant &field : entityObj->getFields()){
+        for(QVariant &field : entityObj->getSummaryFields()){
             model->setItem(row, column, new QStandardItem(item.toMap()[field.toString()].toString()));
             column++;
         }
@@ -196,7 +170,7 @@ QStandardItemModel* HttpRequest::getModel(StoresseEntity::entity entity){
     }
 
     int section = 0;
-    for(const QVariant &field : entityObj->getFields()){
+    for(QVariant &field : entityObj->getSummaryFields()){
 
         model->setHeaderData(section, Qt::Horizontal, field.toString().left(1).toUpper() + field.toString().mid(1));
         section++;
