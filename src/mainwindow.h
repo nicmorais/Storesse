@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QTableWidgetItem>
+#include <QStandardItemModel>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -24,6 +25,8 @@ private:
     Ui::MainWindow *ui;
 
     QRect getSubWindowRect(float width, float height);
+
+    QStandardItemModel *tableModel;
 
 private slots:
     void newSale();

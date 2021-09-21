@@ -23,10 +23,10 @@ LoginWidget::~LoginWidget()
 }
 
 void LoginWidget::connect(){
-    HttpRequest *request = new HttpRequest(this);
+    HttpRequest *request = new HttpRequest;
 
-    QObject::connect(request, SIGNAL(loggedIn()), this, SLOT(showMainWindow()));
     QObject::connect(request, SIGNAL(loggedIn()), this, SLOT(saveSettings()));
+    QObject::connect(request, SIGNAL(loggedIn()), this, SLOT(showMainWindow()));
     QObject::connect(request, SIGNAL(loginFailed(int)), this, SLOT(loginFailed(int)));
 
     request->setHostname(ui->hostnameLineEdit->text());

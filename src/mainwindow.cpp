@@ -5,7 +5,6 @@
 #include "storessecustomer.h"
 #include <QModelIndex>
 #include <QHeaderView>
-#include <QStandardItemModel>
 #include "noteditableitemdelegate.h"
 #include "customerwidget.h"
 
@@ -14,7 +13,6 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
 }
 
 MainWindow::~MainWindow()
@@ -26,33 +24,31 @@ void MainWindow::setUpTable(){
     int currentTab = ui->tabWidget->currentIndex();
 
     HttpRequest request;
-    QStandardItemModel *model;
-
     switch (currentTab) {
     case 0:{
-        model = request.getModel(StoresseEntity::Customer);
+        tableModel = request.getCustomersModel(ui->searchCustomersLineEdit->text());
 
 
         break;
     }
     case 1:{
-        model = request.getModel(StoresseEntity::Product);
+        tableModel = request.getProductsModel(ui->searchProductsLineEdit->text());
         break;
     }
     case 2:{
-        model = request.getModel(StoresseEntity::Sale);
+//        model = request.getSalesModel();
 
         break;
     }
     }
 
-    ui->tableView->setModel(model);
+    ui->tableView->setModel(tableModel);
 
-    if(model->rowCount() > 0){
+    if(tableModel->rowCount() > 0){
         ui->tableView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
     }
 
-    for (int i=0; i<model->columnCount(); i++ ) {
+    for (int i=0; i<tableModel->columnCount(); i++ ) {
         NotEditableItemDelegate *itemDelegate = new NotEditableItemDelegate(ui->tableView);
         ui->tableView->setItemDelegateForColumn(i, itemDelegate);
     }

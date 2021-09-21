@@ -125,6 +125,13 @@
          </widget>
         </item>
         <item>
+         <widget class="QCheckBox" name="salesAnyDateCheckBox">
+          <property name="text">
+           <string>Any date</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QDateEdit" name="salesDateEdit"/>
         </item>
        </layout>

@@ -44,9 +44,11 @@ public:
 
     QStandardItemModel *getModel(StoresseEntity::entity entity);
 
-    QStandardItemModel *getCustomersModel();
+    QStandardItemModel *getCustomersModel(QString name);
 
-    QStandardItemModel *getProductsModel();
+    QStandardItemModel *getProductsModel(QString name);
+
+
 
 private slots:
     void loginReplyFinished(QNetworkReply* reply);

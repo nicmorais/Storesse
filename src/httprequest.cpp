@@ -181,3 +181,80 @@ QStandardItemModel* HttpRequest::getModel(StoresseEntity::entity entity){
     return model;
 }
 
+QStandardItemModel* HttpRequest::getCustomersModel(QString name){
+    QStandardItemModel *model = new QStandardItemModel;
+
+    QNetworkAccessManager localManager;
+    QEventLoop eventLoop;
+    QObject::connect(&localManager, &QNetworkAccessManager::finished,
+                     &eventLoop, &QEventLoop::quit);
+    QUrl url;
+    url.setUrl(QString(s_baseUrl.toString() + "customers?name=" + name));
+    s_requestWithToken.setUrl(url);
+
+    QNetworkReply* reply = localManager.get(s_requestWithToken);
+    eventLoop.exec();
+
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(reply->readAll());
+    StoresseCustomer customer;
+
+    int row = 0;
+    int column = 0;
+    for (QVariant item : jsonDoc.toVariant().toMap()["data"].toList()){
+        column = 0;
+
+        for(QVariant &field : customer.getSummaryFields()){
+            model->setItem(row, column, new QStandardItem(item.toMap()[field.toString()].toString()));
+            column++;
+        }
+        row++;
+    }
+
+    int section = 0;
+    for(QVariant &field : customer.getSummaryFields()){
+
+        model->setHeaderData(section, Qt::Horizontal, field.toString().left(1).toUpper() + field.toString().mid(1));
+        section++;
+
+    }
+    return model;
+}
+
+QStandardItemModel* HttpRequest::getProductsModel(QString name){
+    QStandardItemModel *model = new QStandardItemModel;
+
+    QNetworkAccessManager localManager;
+    QEventLoop eventLoop;
+    QObject::connect(&localManager, &QNetworkAccessManager::finished,
+                     &eventLoop, &QEventLoop::quit);
+    QUrl url;
+    url.setUrl(QString(s_baseUrl.toString() + "products?name=" + name));
+    s_requestWithToken.setUrl(url);
+
+    QNetworkReply* reply = localManager.get(s_requestWithToken);
+    eventLoop.exec();
+
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(reply->readAll());
+    StoresseProduct product;
+
+    int row = 0;
+    int column = 0;
+    for (QVariant item : jsonDoc.toVariant().toMap()["data"].toList()){
+        column = 0;
+
+        for(QVariant &field : product.getSummaryFields()){
+            model->setItem(row, column, new QStandardItem(item.toMap()[field.toString()].toString()));
+            column++;
+        }
+        row++;
+    }
+
+    int section = 0;
+    for(QVariant &field : product.getSummaryFields()){
+
+        model->setHeaderData(section, Qt::Horizontal, field.toString().left(1).toUpper() + field.toString().mid(1));
+        section++;
+
+    }
+    return model;
+}
