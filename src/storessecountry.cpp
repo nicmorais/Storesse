@@ -10,6 +10,6 @@ QList<QVariant> StoresseCountry::getSummaryFields(){
 
     fields.append("id");
     fields.append("name");
-
+    fields.append("code");
     return fields;
 }

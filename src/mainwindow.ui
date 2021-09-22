@@ -201,8 +201,8 @@
    <slot>setUpTable()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>101</x>
-     <y>95</y>
+     <x>783</x>
+     <y>96</y>
     </hint>
     <hint type="destinationlabel">
      <x>856</x>
@@ -217,8 +217,8 @@
    <slot>setUpTable()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>79</x>
-     <y>95</y>
+     <x>593</x>
+     <y>96</y>
     </hint>
     <hint type="destinationlabel">
      <x>853</x>
@@ -233,8 +233,8 @@
    <slot>setUpTable()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>101</x>
-     <y>95</y>
+     <x>760</x>
+     <y>96</y>
     </hint>
     <hint type="destinationlabel">
      <x>855</x>
@@ -265,12 +265,12 @@
    <slot>click()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>72</x>
-     <y>95</y>
+     <x>128</x>
+     <y>96</y>
     </hint>
     <hint type="destinationlabel">
-     <x>101</x>
-     <y>95</y>
+     <x>783</x>
+     <y>96</y>
     </hint>
    </hints>
   </connection>
@@ -281,12 +281,12 @@
    <slot>click()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>57</x>
-     <y>95</y>
+     <x>117</x>
+     <y>96</y>
     </hint>
     <hint type="destinationlabel">
-     <x>79</x>
-     <y>95</y>
+     <x>593</x>
+     <y>96</y>
     </hint>
    </hints>
   </connection>
@@ -297,7 +297,7 @@
    <slot>newSale()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>35</x>
+     <x>31</x>
      <y>95</y>
     </hint>
     <hint type="destinationlabel">
@@ -335,6 +335,38 @@
     <hint type="destinationlabel">
      <x>857</x>
      <y>170</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>salesAnyDateCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>salesDateEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>696</x>
+     <y>97</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>775</x>
+     <y>100</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tabWidget</sender>
+   <signal>currentChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>setUpTable()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>782</x>
+     <y>84</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>854</x>
+     <y>140</y>
     </hint>
    </hints>
   </connection>

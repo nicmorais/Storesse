@@ -13,10 +13,20 @@ class SaleWidget : public QWidget
 
 public:
     explicit SaleWidget(QWidget *parent = nullptr);
+
+    SaleWidget(int saleId, QWidget *parent = nullptr);
+
     ~SaleWidget();
 
 private:
     Ui::SaleWidget *ui;
+
+    int saleId;
+
+private slots:
+    void searchProducts();
+
+    void searchCustomers();
 };
 
 #endif // SALEWIDGET_H

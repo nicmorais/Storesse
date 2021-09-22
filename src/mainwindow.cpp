@@ -7,12 +7,14 @@
 #include <QHeaderView>
 #include "noteditableitemdelegate.h"
 #include "customerwidget.h"
+#include "salewidget.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->salesDateEdit->setDate(QDate::currentDate());
 }
 
 MainWindow::~MainWindow()
@@ -27,8 +29,6 @@ void MainWindow::setUpTable(){
     switch (currentTab) {
     case 0:{
         tableModel = request.getCustomersModel(ui->searchCustomersLineEdit->text());
-
-
         break;
     }
     case 1:{
@@ -36,7 +36,11 @@ void MainWindow::setUpTable(){
         break;
     }
     case 2:{
-//        model = request.getSalesModel();
+        if(ui->salesAnyDateCheckBox->isChecked()){
+            tableModel = request.getSalesModel(ui->searchSalesLineEdit->text());
+        }else{
+            tableModel = request.getSalesModel(ui->searchSalesLineEdit->text(), ui->salesDateEdit->date());
+        }
 
         break;
     }
@@ -56,7 +60,9 @@ void MainWindow::setUpTable(){
 }
 
 void MainWindow::newSale(){
-
+    SaleWidget *saleWidget = new SaleWidget;
+    saleWidget->setGeometry(getSubWindowRect(0.9, 0.9));
+    saleWidget->show();
 }
 
 void MainWindow::editItem(QModelIndex index){

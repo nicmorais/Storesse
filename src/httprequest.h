@@ -48,7 +48,11 @@ public:
 
     QStandardItemModel *getProductsModel(QString name);
 
+    QStandardItemModel *getSalesModel(QString name);
 
+    QStandardItemModel *getSalesModel(QString name, QDate date);
+
+    QStandardItemModel *getCountriesModel;
 
 private slots:
     void loginReplyFinished(QNetworkReply* reply);
