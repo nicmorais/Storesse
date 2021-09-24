@@ -65,6 +65,12 @@ void MainWindow::newSale(){
     saleWidget->show();
 }
 
+void MainWindow::newCustomer(){
+    CustomerWidget *customerWidget = new CustomerWidget;
+    customerWidget->setGeometry(getSubWindowRect(0.5, 0.9));
+    customerWidget->show();
+}
+
 void MainWindow::editItem(QModelIndex index){
     int currentTab = ui->tabWidget->currentIndex();
 

@@ -34,7 +34,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <property name="iconSize">
        <size>
@@ -185,8 +185,8 @@
    <slot>setUpTable()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>840</x>
-     <y>109</y>
+     <x>783</x>
+     <y>96</y>
     </hint>
     <hint type="destinationlabel">
      <x>858</x>
@@ -249,12 +249,12 @@
    <slot>click()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>195</x>
-     <y>109</y>
+     <x>128</x>
+     <y>96</y>
     </hint>
     <hint type="destinationlabel">
-     <x>840</x>
-     <y>109</y>
+     <x>783</x>
+     <y>96</y>
     </hint>
    </hints>
   </connection>
@@ -345,12 +345,12 @@
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>696</x>
+     <x>680</x>
      <y>97</y>
     </hint>
     <hint type="destinationlabel">
-     <x>775</x>
-     <y>100</y>
+     <x>760</x>
+     <y>96</y>
     </hint>
    </hints>
   </connection>
@@ -377,12 +377,28 @@
    <slot>setUpTable()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>731</x>
-     <y>96</y>
+     <x>680</x>
+     <y>97</y>
     </hint>
     <hint type="destinationlabel">
      <x>857</x>
      <y>198</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>newCostumerBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>newCustomer()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>80</x>
+     <y>103</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>6</x>
+     <y>159</y>
     </hint>
    </hints>
   </connection>
@@ -391,5 +407,6 @@
   <slot>setUpTable()</slot>
   <slot>newSale()</slot>
   <slot>editItem(QModelIndex)</slot>
+  <slot>newCustomer()</slot>
  </slots>
 </ui>

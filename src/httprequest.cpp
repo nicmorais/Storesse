@@ -572,7 +572,7 @@ QStandardItemModel* HttpRequest::getCitiesModel(int countryId, int stateId){
     return model;
 }
 
-void HttpRequest::createCustomer(StoresseCustomer customer){
+void HttpRequest::createCustomer(StoresseCustomer *customer){
     QNetworkAccessManager localManager;
     QEventLoop eventLoop;
     QObject::connect(&localManager, &QNetworkAccessManager::finished,
@@ -583,28 +583,32 @@ void HttpRequest::createCustomer(StoresseCustomer customer){
 
 
     QJsonObject customerJson;
-    customerJson.insert("email", customer.email);
-    customerJson.insert("address_line1", customer.addressLine1);
-    customerJson.insert("address_line2", customer.addressLine2);
-    customerJson.insert("document", customer.document);
-    customerJson.insert("zipcode", customer.zipCode);
-    customerJson.insert("birthdate", customer.birthdate.toString("yyyy-MM-dd"));
-    customerJson.insert("email", customer.email);
-    customerJson.insert("city_id", customer.city.id);
+    customerJson.insert("name", customer->name);
+    customerJson.insert("email", customer->email);
+    customerJson.insert("address_line1", customer->addressLine1);
+    customerJson.insert("address_line2", customer->addressLine2);
+    customerJson.insert("document", customer->document);
+    customerJson.insert("zip_code", customer->zipCode);
+    customerJson.insert("birthdate", customer->birthdate.toString("yyyy-MM-dd"));
+    customerJson.insert("email", customer->email);
+    customerJson.insert("city_id", customer->cityId);
 
-    QJsonDocument jsonDoc(customerJson);
+    QJsonObject parentObj{{"customer", QJsonObject{customerJson}}};
+
+    QJsonDocument jsonDoc(parentObj);
 
     QByteArray jsonData = jsonDoc.toJson();
 
     localManager.post(s_requestWithToken, jsonData);
+
     eventLoop.exec();
 }
 
 void HttpRequest::updateCustomer(StoresseCustomer *customer){
-    QNetworkAccessManager manager;
+    QNetworkAccessManager localManager;
 
     QEventLoop eventLoop;
-    QObject::connect(&manager, &QNetworkAccessManager::finished,
+    QObject::connect(&localManager, &QNetworkAccessManager::finished,
                      &eventLoop, &QEventLoop::quit);
     QUrl url;
     url.setUrl(QString(s_baseUrl.toString() + "customers/1"));
@@ -628,7 +632,7 @@ void HttpRequest::updateCustomer(StoresseCustomer *customer){
 
     QByteArray jsonData = jsonDoc.toJson();
 
-    manager.put(s_requestWithToken, jsonData);
+    localManager.put(s_requestWithToken, jsonData);
 
     eventLoop.exec();
 }

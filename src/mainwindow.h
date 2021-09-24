@@ -30,5 +30,7 @@ private:
 
 private slots:
     void newSale();
+
+    void newCustomer();
 };
 #endif // MAINWINDOW_H

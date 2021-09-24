@@ -110,17 +110,22 @@ void CustomerWidget::setUpCitiesModel(){
 }
 
 void CustomerWidget::save(){
-    StoresseCustomer *customer = new StoresseCustomer(this);
+    StoresseCustomer customer;
+    customer.name = ui->nameLineEdit->text();
+    customer.email = ui->emailLineEdit->text();
+    customer.addressLine1 = ui->addressLine1LineEdit->text();
+    customer.addressLine2 = ui->addressLine2LineEdit->text();
+    customer.cityId = ui->cityComboBox->model()->index(ui->cityComboBox->currentIndex(), 1).data(2).toInt();
+    customer.zipCode = ui->zipCodeLineEdit->text();
+    customer.birthdate = ui->birthdateDateEdit->date();
+    customer.document = ui->documentLineEdit->text();
 
-    customer->name = ui->nameLineEdit->text();
-    customer->email = ui->emailLineEdit->text();
-    customer->addressLine1 = ui->addressLine1LineEdit->text();
-    customer->addressLine2 = ui->addressLine2LineEdit->text();
-    customer->cityId = ui->cityComboBox->model()->index(ui->cityComboBox->currentIndex(), 1).data(2).toInt();
-    customer->zipCode = ui->zipCodeLineEdit->text();
-    customer->birthdate = ui->birthdateDateEdit->date();
-    customer->document = ui->documentLineEdit->text();
-    request.updateCustomer(customer);
+    if(mode == StoresseWindow::Edit){
+        request.updateCustomer(&customer);
+    }else{
+        request.createCustomer(&customer);
+    }
+
 
     close();
 }

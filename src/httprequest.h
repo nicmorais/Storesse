@@ -71,7 +71,7 @@ public:
 
     QStandardItemModel *getCitiesModel(int countryId, int stateId);
 
-    void createCustomer(StoresseCustomer customer);
+    void createCustomer(StoresseCustomer *customer);
 
     void updateCustomer(StoresseCustomer *costumer);
 
