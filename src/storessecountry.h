@@ -13,7 +13,10 @@ public:
     QList<QVariant> getSummaryFields() override;
 
     int id;
+
     QString name;
+
+    QString code;
 
 };
 

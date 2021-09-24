@@ -9,6 +9,8 @@
 #include "storesseproduct.h"
 #include "storessesale.h"
 #include "storessecustomer.h"
+#include "storessecountry.h"
+#include "storessestate.h"
 
 HttpRequest::HttpRequest(QObject* parent) :
     QObject(parent)
@@ -72,6 +74,8 @@ void HttpRequest::loginReplyFinished(QNetworkReply* reply){
 
         HttpRequest::s_token = token;
         QString bearer = "Bearer: " +  s_token;
+        s_requestWithToken.setAttribute(QNetworkRequest::Http2AllowedAttribute, false);
+
         s_requestWithToken.setRawHeader("Authorization: ", bearer.toLocal8Bit());
         s_requestWithToken.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
 
@@ -118,8 +122,120 @@ StoresseCustomer* HttpRequest::getCustomerData(int id){
     customer->document = jsonDoc.toVariant().toMap()["data"].toMap()["document"].toString();
     customer->birthdate = jsonDoc.toVariant().toMap()["data"].toMap()["birthdate"].toDate();
     customer->email = jsonDoc.toVariant().toMap()["data"].toMap()["email"].toString();
+    customer->cityId = jsonDoc.toVariant().toMap()["data"].toMap()["city_id"].toInt();
 
     return customer;
+}
+
+StoresseCountry* HttpRequest::getCountryData(int id){
+    QNetworkAccessManager localManager;
+    QEventLoop eventLoop;
+    QObject::connect(&localManager, &QNetworkAccessManager::finished,
+                     &eventLoop, &QEventLoop::quit);
+
+    s_requestWithToken.setUrl(QUrl(QString(s_baseUrl.toString() + "countries/%1").arg(id)));
+
+    QNetworkReply* reply = localManager.get(s_requestWithToken);
+    eventLoop.exec();
+
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(reply->readAll());
+
+    reply->deleteLater();
+
+    StoresseCountry *country= new StoresseCountry;
+
+    country->name = jsonDoc.toVariant().toMap()["data"].toMap()["name"].toString();
+    country->code = jsonDoc.toVariant().toMap()["data"].toMap()["code"].toString();    
+
+    return country;
+}
+
+StoresseState* HttpRequest::getStateData(int id){
+    QNetworkAccessManager localManager;
+    QEventLoop eventLoop;
+    QObject::connect(&localManager, &QNetworkAccessManager::finished,
+                     &eventLoop, &QEventLoop::quit);
+
+    s_requestWithToken.setUrl(QUrl(QString(s_baseUrl.toString() + "states/%1").arg(id)));
+
+    QNetworkReply* reply = localManager.get(s_requestWithToken);
+    eventLoop.exec();
+
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(reply->readAll());
+
+    reply->deleteLater();
+
+    StoresseState *state= new StoresseState;
+
+    state->name = jsonDoc.toVariant().toMap()["data"].toMap()["name"].toString();
+    state->code = jsonDoc.toVariant().toMap()["data"].toMap()["code"].toString();
+    state->countryId = jsonDoc.toVariant().toMap()["data"].toMap()["country_id"].toInt();
+    return state;
+}
+
+StoresseCity* HttpRequest::getCityData(int countryId, int stateId, int id){
+    QNetworkAccessManager localManager;
+    QEventLoop eventLoop;
+    QObject::connect(&localManager, &QNetworkAccessManager::finished,
+                     &eventLoop, &QEventLoop::quit);
+
+    s_requestWithToken.setUrl(QUrl(QString(s_baseUrl.toString() + "countries/%1/states/%2/cities/%3").arg(countryId).arg(stateId).arg(id)));
+
+    QNetworkReply* reply = localManager.get(s_requestWithToken);
+    eventLoop.exec();
+
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(reply->readAll());
+
+    reply->deleteLater();
+
+    StoresseCity *city= new StoresseCity;
+
+    city->name = jsonDoc.toVariant().toMap()["data"].toMap()["name"].toString();
+    city->stateId = jsonDoc.toVariant().toMap()["data"].toMap()["state_id"].toInt();
+    return city;
+}
+
+void HttpRequest::getCityData(StoresseCity *city){
+    QNetworkAccessManager localManager;
+    QEventLoop eventLoop;
+    QObject::connect(&localManager, &QNetworkAccessManager::finished,
+                     &eventLoop, &QEventLoop::quit);
+
+    s_requestWithToken.setUrl(QUrl(QString(s_baseUrl.toString() + "cities/%1").arg(city->id)));
+
+    QNetworkReply* reply = localManager.get(s_requestWithToken);
+    eventLoop.exec();
+
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(reply->readAll());
+
+    reply->deleteLater();
+
+    city->name = jsonDoc.toVariant().toMap()["data"].toMap()["name"].toString();
+
+    city->stateId = jsonDoc.toVariant().toMap()["data"].toMap()["state_id"].toInt();
+}
+
+StoresseCity* HttpRequest::getCityData(int id){
+    QNetworkAccessManager localManager;
+    QEventLoop eventLoop;
+    QObject::connect(&localManager, &QNetworkAccessManager::finished,
+                     &eventLoop, &QEventLoop::quit);
+
+    s_requestWithToken.setUrl(QUrl(QString(s_baseUrl.toString() + "cities/%1").arg(id)));
+
+    QNetworkReply* reply = localManager.get(s_requestWithToken);
+    eventLoop.exec();
+
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(reply->readAll());
+
+    reply->deleteLater();
+
+    StoresseCity *city= new StoresseCity;
+
+    city->name = jsonDoc.toVariant().toMap()["data"].toMap()["name"].toString();
+    city->stateId = jsonDoc.toVariant().toMap()["data"].toMap()["state_id"].toInt();
+
+    return city;
 }
 
 QStandardItemModel* HttpRequest::getModel(StoresseEntity::entity entity){
@@ -267,9 +383,8 @@ QStandardItemModel* HttpRequest::getSalesModel(QString customerName, QDate date)
     QObject::connect(&localManager, &QNetworkAccessManager::finished,
                      &eventLoop, &QEventLoop::quit);
     QUrl url;
-    url.setUrl(QString(s_baseUrl.toString() + "sales?customer_name=" + customerName + "&date=" + date.toString(Qt::ISODate)));
+    url.setUrl(QString(s_baseUrl.toString() + "sales?customer_name=" + customerName + "&date=" + date.toString("yyyy-MM-dd")));
     s_requestWithToken.setUrl(url);
-
     QNetworkReply* reply = localManager.get(s_requestWithToken);
     eventLoop.exec();
 
@@ -335,4 +450,185 @@ QStandardItemModel* HttpRequest::getSalesModel(QString customerName){
 
     }
     return model;
+}
+
+QStandardItemModel* HttpRequest::getCountriesModel(){
+    QStandardItemModel *model = new QStandardItemModel;
+
+    QNetworkAccessManager localManager;
+    QEventLoop eventLoop;
+    QObject::connect(&localManager, &QNetworkAccessManager::finished,
+                     &eventLoop, &QEventLoop::quit);
+    QUrl url;
+    url.setUrl(QString(s_baseUrl.toString() + "countries"));
+    s_requestWithToken.setUrl(url);
+
+    QNetworkReply* reply = localManager.get(s_requestWithToken);
+    eventLoop.exec();
+
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(reply->readAll());
+    StoresseCountry country;
+
+    int row = 0;
+    int column = 0;
+    for (QVariant item : jsonDoc.toVariant().toMap()["data"].toList()){
+        column = 0;
+
+        for(QVariant &field : country.getSummaryFields()){
+            model->setItem(row, column, new QStandardItem(item.toMap()[field.toString()].toString()));
+            column++;
+        }
+        row++;
+    }
+
+    int section = 0;
+    for(QVariant &field : country.getSummaryFields()){
+
+        model->setHeaderData(section, Qt::Horizontal, field.toString().left(1).toUpper() + field.toString().mid(1));
+        section++;
+
+    }
+    return model;
+}
+
+
+QStandardItemModel* HttpRequest::getStatesModel(int countryId){
+    QStandardItemModel *model = new QStandardItemModel;
+
+    QNetworkAccessManager localManager;
+    QEventLoop eventLoop;
+    QObject::connect(&localManager, &QNetworkAccessManager::finished,
+                     &eventLoop, &QEventLoop::quit);
+    QUrl url;
+    url.setUrl(QString(s_baseUrl.toString() + QString("countries/%1/states").arg(countryId)));
+    s_requestWithToken.setUrl(url);
+
+    QNetworkReply* reply = localManager.get(s_requestWithToken);
+    eventLoop.exec();
+
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(reply->readAll());
+    StoresseState state;
+
+    int row = 0;
+    int column = 0;
+    for (QVariant item : jsonDoc.toVariant().toMap()["data"].toList()){
+        column = 0;
+
+        for(QVariant &field : state.getSummaryFields()){
+            model->setItem(row, column, new QStandardItem(item.toMap()[field.toString()].toString()));
+            column++;
+        }
+        row++;
+    }
+
+    int section = 0;
+    for(QVariant &field : state.getSummaryFields()){
+
+        model->setHeaderData(section, Qt::Horizontal, field.toString().left(1).toUpper() + field.toString().mid(1));
+        section++;
+
+    }
+    return model;
+}
+
+QStandardItemModel* HttpRequest::getCitiesModel(int countryId, int stateId){
+    QStandardItemModel *model = new QStandardItemModel;
+
+    QNetworkAccessManager localManager;
+    QEventLoop eventLoop;
+    QObject::connect(&localManager, &QNetworkAccessManager::finished,
+                     &eventLoop, &QEventLoop::quit);
+    QUrl url;
+    url.setUrl(QString(s_baseUrl.toString() + QString("countries/%1/states/%2/cities")
+                       .arg(countryId)
+                       .arg(stateId)));
+    s_requestWithToken.setUrl(url);
+
+    QNetworkReply* reply = localManager.get(s_requestWithToken);
+    eventLoop.exec();
+
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(reply->readAll());
+    StoresseCity city;
+
+    int row = 0;
+    int column = 0;
+    for (QVariant item : jsonDoc.toVariant().toMap()["data"].toList()){
+        column = 0;
+
+        for(QVariant &field : city.getSummaryFields()){
+            model->setItem(row, column, new QStandardItem(item.toMap()[field.toString()].toString()));
+            column++;
+        }
+        row++;
+    }
+
+    int section = 0;
+    for(QVariant &field : city.getSummaryFields()){
+
+        model->setHeaderData(section, Qt::Horizontal, field.toString().left(1).toUpper() + field.toString().mid(1));
+        section++;
+
+    }
+    return model;
+}
+
+void HttpRequest::createCustomer(StoresseCustomer customer){
+    QNetworkAccessManager localManager;
+    QEventLoop eventLoop;
+    QObject::connect(&localManager, &QNetworkAccessManager::finished,
+                     &eventLoop, &QEventLoop::quit);
+    QUrl url;
+    url.setUrl(QString(s_baseUrl.toString() + "customers" ));
+    s_requestWithToken.setUrl(url);
+
+
+    QJsonObject customerJson;
+    customerJson.insert("email", customer.email);
+    customerJson.insert("address_line1", customer.addressLine1);
+    customerJson.insert("address_line2", customer.addressLine2);
+    customerJson.insert("document", customer.document);
+    customerJson.insert("zipcode", customer.zipCode);
+    customerJson.insert("birthdate", customer.birthdate.toString("yyyy-MM-dd"));
+    customerJson.insert("email", customer.email);
+    customerJson.insert("city_id", customer.city.id);
+
+    QJsonDocument jsonDoc(customerJson);
+
+    QByteArray jsonData = jsonDoc.toJson();
+
+    localManager.post(s_requestWithToken, jsonData);
+    eventLoop.exec();
+}
+
+void HttpRequest::updateCustomer(StoresseCustomer *customer){
+    QNetworkAccessManager manager;
+
+    QEventLoop eventLoop;
+    QObject::connect(&manager, &QNetworkAccessManager::finished,
+                     &eventLoop, &QEventLoop::quit);
+    QUrl url;
+    url.setUrl(QString(s_baseUrl.toString() + "customers/1"));
+
+    s_requestWithToken.setUrl(url);
+
+    QJsonObject customerJson;
+    customerJson.insert("name", customer->name);
+    customerJson.insert("email", customer->email);
+    customerJson.insert("address_line1", customer->addressLine1);
+    customerJson.insert("address_line2", customer->addressLine2);
+    customerJson.insert("document", customer->document);
+    customerJson.insert("zip_code", customer->zipCode);
+    customerJson.insert("birthdate", customer->birthdate.toString("yyyy-MM-dd"));
+    customerJson.insert("email", customer->email);
+    customerJson.insert("city_id", customer->cityId);
+
+    QJsonObject parentObj{{"customer", QJsonObject{customerJson}}};
+
+    QJsonDocument jsonDoc(parentObj);
+
+    QByteArray jsonData = jsonDoc.toJson();
+
+    manager.put(s_requestWithToken, jsonData);
+
+    eventLoop.exec();
 }

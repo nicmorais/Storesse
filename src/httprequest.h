@@ -8,6 +8,9 @@
 #include <QTableWidget>
 #include <QStandardItemModel>
 #include "storessecustomer.h"
+#include "storessecountry.h"
+#include "storessestate.h"
+#include "storessecity.h"
 
 class HttpRequest : public QObject
 {
@@ -42,6 +45,16 @@ public:
 
     StoresseCustomer *getCustomerData(int id);
 
+    StoresseCountry *getCountryData(int id);
+
+    StoresseState *getStateData(int id);
+
+    StoresseCity *getCityData(int countryId, int stateId, int id);
+
+    StoresseCity *getCityData(int id);
+
+    void getCityData(StoresseCity *city);
+
     QStandardItemModel *getModel(StoresseEntity::entity entity);
 
     QStandardItemModel *getCustomersModel(QString name);
@@ -52,7 +65,15 @@ public:
 
     QStandardItemModel *getSalesModel(QString name, QDate date);
 
-    QStandardItemModel *getCountriesModel;
+    QStandardItemModel *getCountriesModel();
+
+    QStandardItemModel *getStatesModel(int countryId);
+
+    QStandardItemModel *getCitiesModel(int countryId, int stateId);
+
+    void createCustomer(StoresseCustomer customer);
+
+    void updateCustomer(StoresseCustomer *costumer);
 
 private slots:
     void loginReplyFinished(QNetworkReply* reply);

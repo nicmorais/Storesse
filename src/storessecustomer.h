@@ -26,6 +26,10 @@ public:
     QString email;
     StoresseCity city;
 
+    int countryId;
+    int stateId;
+    int cityId;
+
 signals:
 
 private:

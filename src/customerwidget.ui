@@ -175,5 +175,59 @@
  <resources>
   <include location="../resources/resources.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>countryComboBox</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>CustomerWidget</receiver>
+   <slot>setUpStatesModel()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>153</x>
+     <y>242</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>453</x>
+     <y>238</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>stateComboBox</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>CustomerWidget</receiver>
+   <slot>setUpCitiesModel()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>282</x>
+     <y>270</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>419</x>
+     <y>269</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>saveBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>CustomerWidget</receiver>
+   <slot>save()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>334</x>
+     <y>348</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>393</x>
+     <y>336</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>setUpStatesModel()</slot>
+  <slot>setUpCitiesModel()</slot>
+  <slot>save()</slot>
+ </slots>
 </ui>

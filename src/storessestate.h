@@ -6,10 +6,25 @@
 
 class StoresseState : public StoresseEntity
 {
-    Q_OBJECT
+
 public:
-    explicit StoresseState(QObject *parent = nullptr);
+    StoresseState(QObject *parent = nullptr);
 
     QList<QVariant> getSummaryFields() override;
+
+    int id;
+
+    int countryId;
+
+    QString name;
+
+    QString code;
+
+//    StoresseCountry country;
+
+    void setId(int id);
+
+    void getData();
+
 };
 #endif // STORESSESTATE_H

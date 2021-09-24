@@ -2,14 +2,26 @@
 #define STORESSECITY_H
 
 #include <QObject>
+#include "storesseentity.h"
 
-class StoresseCity : public QObject
+class StoresseCity : public StoresseEntity
 {
     Q_OBJECT
 public:
     explicit StoresseCity(QObject *parent = nullptr);
 
-signals:
+    QList<QVariant> getSummaryFields() override;
+
+    int id;
+
+    QString name;
+
+    int stateId;
+
+    int countryId;
+
+    void getData();
+Q_SIGNALS:
 
 };
 

@@ -34,7 +34,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <property name="iconSize">
        <size>
@@ -342,7 +342,7 @@
    <sender>salesAnyDateCheckBox</sender>
    <signal>toggled(bool)</signal>
    <receiver>salesDateEdit</receiver>
-   <slot>setEnabled(bool)</slot>
+   <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>696</x>
@@ -367,6 +367,22 @@
     <hint type="destinationlabel">
      <x>854</x>
      <y>140</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>salesAnyDateCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>setUpTable()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>731</x>
+     <y>96</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>857</x>
+     <y>198</y>
     </hint>
    </hints>
   </connection>
