@@ -611,11 +611,12 @@ void HttpRequest::updateCustomer(StoresseCustomer *customer){
     QObject::connect(&localManager, &QNetworkAccessManager::finished,
                      &eventLoop, &QEventLoop::quit);
     QUrl url;
-    url.setUrl(QString(s_baseUrl.toString() + "customers/1"));
+    url.setUrl(QString(s_baseUrl.toString() + "customers/%1").arg(customer->id));
 
     s_requestWithToken.setUrl(url);
 
     QJsonObject customerJson;
+    customerJson.insert("id", customer->id);
     customerJson.insert("name", customer->name);
     customerJson.insert("email", customer->email);
     customerJson.insert("address_line1", customer->addressLine1);

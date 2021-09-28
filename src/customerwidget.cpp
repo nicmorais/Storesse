@@ -29,6 +29,7 @@ CustomerWidget::CustomerWidget(int id, QWidget *parent) :
     int customerId = id;
 
     customer = request.getCustomerData(customerId);
+    customer->id = customerId;
     ui->nameLineEdit->setText(customer->name);
     ui->addressLine1LineEdit->setText(customer->addressLine1);
     ui->addressLine2LineEdit->setText(customer->addressLine2);
@@ -110,20 +111,20 @@ void CustomerWidget::setUpCitiesModel(){
 }
 
 void CustomerWidget::save(){
-    StoresseCustomer customer;
-    customer.name = ui->nameLineEdit->text();
-    customer.email = ui->emailLineEdit->text();
-    customer.addressLine1 = ui->addressLine1LineEdit->text();
-    customer.addressLine2 = ui->addressLine2LineEdit->text();
-    customer.cityId = ui->cityComboBox->model()->index(ui->cityComboBox->currentIndex(), 1).data(2).toInt();
-    customer.zipCode = ui->zipCodeLineEdit->text();
-    customer.birthdate = ui->birthdateDateEdit->date();
-    customer.document = ui->documentLineEdit->text();
+
+    customer->name = ui->nameLineEdit->text();
+    customer->email = ui->emailLineEdit->text();
+    customer->addressLine1 = ui->addressLine1LineEdit->text();
+    customer->addressLine2 = ui->addressLine2LineEdit->text();
+    customer->cityId = ui->cityComboBox->model()->index(ui->cityComboBox->currentIndex(), 1).data(2).toInt();
+    customer->zipCode = ui->zipCodeLineEdit->text();
+    customer->birthdate = ui->birthdateDateEdit->date();
+    customer->document = ui->documentLineEdit->text();
 
     if(mode == StoresseWindow::Edit){
-        request.updateCustomer(&customer);
+        request.updateCustomer(customer);
     }else{
-        request.createCustomer(&customer);
+        request.createCustomer(customer);
     }
 
 
